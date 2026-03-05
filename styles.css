@@ -2547,7 +2547,7 @@ footer{
 
 /* Mobile scroll fix — add this block right here */
 @media (max-width: 768px) {
-  .workflow-section .wf-stepper {
+  #workflow-section .wf-stepper {
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -2555,11 +2555,11 @@ footer{
     padding-bottom: 4px;
   }
 
-  .workflow-section .wf-stepper::-webkit-scrollbar {
+  #workflow-section .wf-stepper::-webkit-scrollbar {
     display: none;
   }
 
-  .workflow-section .wf-step-btn {
+  #workflow-section .wf-step-btn {
     flex-shrink: 0;
     white-space: nowrap;
   }
@@ -2675,4 +2675,21 @@ footer{
   }
 }
 
+@media (max-width: 768px) {
+  #hero-banner .hero {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #hero-banner .gallery {
+    order: 2;
+  }
+
+  #hero-banner .hero > div:not(.gallery) {
+    order: 1;
+  }
+  #hero-banner .zoom-preview {
+    display: none;
+  }
+}
 
