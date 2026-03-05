@@ -275,6 +275,17 @@ h1,h2,h3{
   background:var(--neutral-50);
 }
 
+@media (max-width: 768px) {
+  #hero-banner .btn-primary,
+  #hero-banner .btn-outline {
+    width: 100%;
+    display: block;
+    text-align: center;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+  }
+}
+
 /* HERO */
 
 .hero{
@@ -2692,4 +2703,5 @@ footer{
     display: none;
   }
 }
+
 
