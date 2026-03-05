@@ -2662,3 +2662,10 @@ footer{
   }
 
 }
+
+@media (max-width: 600px) {
+  .portfolio-section .pf-cta-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
