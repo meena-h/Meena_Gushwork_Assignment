@@ -784,6 +784,19 @@ footer{
   height: 40px;
   object-fit: contain;
 }
+
+@media (max-width: 768px) {
+  #hero-banner .company-logos {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    justify-content: flex-start;
+  }
+
+  #hero-banner .company-logos img {
+    flex-shrink: 0;
+  }
+}
 #hero-banner{
   font-family:'Inter',sans-serif;
   background-image: url('./assets/hero-fold-v2.png');
@@ -2703,5 +2716,6 @@ footer{
     display: none;
   }
 }
+
 
 
