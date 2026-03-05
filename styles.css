@@ -1,52 +1,72 @@
+/* =========================================================
+   GLOBAL RESET
+   Removes default browser margins/padding and enforces
+   border-box sizing so padding/border don't affect element width.
+   ========================================================= */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* Base body styles — default font, background, and text color */
 body {
   font-family: Arial, sans-serif;
   background: #f9f9f9;
   color: #111;
 }
-/* ================= HEADER ================= */
-/* ================= STICKY HEADER TRANSITIONS ================= */
+
+
+/* =========================================================
+   HEADER — STICKY SCROLL TRANSITIONS
+   Three scroll states managed by JS class toggling:
+   1. Default        : header in normal flow, no transform
+   2. .sticky-hidden : user scrolled DOWN past first fold → slides up out of view
+   3. .sticky-visible: user scrolled UP past first fold  → slides back into view
+   Transitions apply to transform, box-shadow, and padding for smooth animation.
+   ========================================================= */
 
 header {
   transform: translateY(0);
   transition: transform 0.35s ease, box-shadow 0.3s ease, padding 0.3s ease;
 }
 
-/* When scrolled past first fold and scrolling DOWN → slide up out of view */
+/* Scrolling DOWN past first fold — hide header above viewport */
 header.sticky-hidden {
   transform: translateY(-100%);
 }
 
-/* When scrolled past first fold and scrolling UP → slide back into view */
+/* Scrolling UP past first fold — reveal header with subtle shadow */
 header.sticky-visible {
   transform: translateY(0);
-  
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.10);
 }
+
+/* Base header layout — fixed to the top, full width, above all content */
 header {
-  position: fixed;        /* Float above page, no reserved space */
+  position: fixed;        /* Floats above page, does not reserve space in document flow */
   top: 0;
   left: 0;
   width: 100%;
   transform: translateY(0);
   transition: transform 0.35s ease, box-shadow 0.3s ease, padding 0.3s ease;
   background: #ffffff;
-  z-index: 1000;
+  z-index: 1000;          /* Ensures header stays above all other content */
   padding-top: 10px;
   padding-bottom: 10px;
 }
 
-/* When scrolled */
+/* Shrink header padding after user scrolls 50px (JS adds .scrolled class) */
 header.scrolled {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   padding: 5px 0;
 }
 
+/* =========================================================
+   HEADER — INNER CONTAINER
+   Max-width wrapper with flex layout for logo + nav + hamburger.
+   Padding shrinks when .scrolled is applied.
+   ========================================================= */
 .container {
   max-width: 1440px;
   margin: auto;
@@ -57,12 +77,15 @@ header.scrolled {
   transition: 0.3s;
 }
 
-/* Shrink header when scrolled */
+/* Tighter padding when header is in scrolled state */
 header.scrolled .container {
   padding: 10px 40px;
 }
 
-/* Logo */
+/* =========================================================
+   HEADER — LOGO
+   Logo shrinks slightly when the header is in scrolled state.
+   ========================================================= */
 .logo img {
   height: 45px;
   transition: 0.3s;
@@ -72,13 +95,17 @@ header.scrolled .logo img {
   height: 38px;
 }
 
-/* Desktop Nav */
+/* =========================================================
+   HEADER — DESKTOP NAVIGATION
+   Flex row of links, dropdown trigger, and CTA button.
+   ========================================================= */
 nav {
   display: flex;
   align-items: center;
   gap: 20px;
 }
 
+/* Shared styles for nav links and the dropdown trigger button */
 nav a,
 .dropdown-btn {
   text-decoration: none;
@@ -93,11 +120,13 @@ nav a,
   border: none;
 }
 
+/* Hover background highlight for nav links and dropdown button */
 nav a:hover,
 .dropdown-btn:hover {
   background: #f1f1f1;
 }
 
+/* Primary CTA button in the nav — "Contact Us" */
 .contact-btn {
   background: #2B3990;
   color: white;
@@ -107,14 +136,20 @@ nav a:hover,
   background: #22306e;
 }
 
-/* Dropdown */
+/* =========================================================
+   HEADER — DESKTOP PRODUCTS DROPDOWN
+   - .dropdown              : position anchor for the dropdown panel
+   - .dropdown-content      : hidden by default, shown when .active is added by JS
+   - .dropdown.active       : added/removed by JS on button click and outside click
+   ========================================================= */
 .dropdown {
   position: relative;
 }
 
+/* Dropdown panel — hidden until .active is added by JS */
 .dropdown-content {
   position: absolute;
-  top: 110%;
+  top: 110%;           /* Appears just below the trigger button */
   left: 0;
   background: white;
   width: 200px;
@@ -135,11 +170,16 @@ nav a:hover,
   color: #2B3990;
 }
 
+/* JS adds .active to .dropdown to reveal the panel */
 .dropdown.active .dropdown-content {
   display: flex;
 }
 
-/* Mobile */
+/* =========================================================
+   HEADER — MOBILE HAMBURGER BUTTON
+   Hidden on desktop; shown on screens ≤768px.
+   Icon text toggles between ☰ and ✖ via JS.
+   ========================================================= */
 .menu-btn {
   display: none;
   font-size: 24px;
@@ -148,6 +188,11 @@ nav a:hover,
   border: none;
 }
 
+/* =========================================================
+   HEADER — MOBILE MENU PANEL
+   Full-width dropdown panel below the header on mobile.
+   Hidden by default; JS adds .active to show it.
+   ========================================================= */
 .mobile-menu {
   display: none;
   flex-direction: column;
@@ -156,6 +201,7 @@ nav a:hover,
   background: white;
 }
 
+/* Shared styles for mobile nav links and mobile dropdown trigger */
 .mobile-menu a,
 .mobile-dropdown-btn {
   padding: 12px;
@@ -175,16 +221,22 @@ nav a:hover,
   background: #f1f1f1;
 }
 
+/* =========================================================
+   HEADER — MOBILE PRODUCTS SUB-MENU
+   Indented nested dropdown inside the mobile menu.
+   JS toggles .active on .mobile-dropdown to show/hide it.
+   ========================================================= */
 .mobile-dropdown {
   display: none;
   flex-direction: column;
-  margin-left: 20px;
+  margin-left: 20px;     /* Indent to visually nest under "Products" */
 }
 
 .mobile-dropdown a {
   padding: 8px 12px;
 }
 
+/* JS adds .active to show the mobile menu and mobile dropdown */
 .mobile-menu.active {
   display: flex;
 }
@@ -193,7 +245,12 @@ nav a:hover,
   display: flex;
 }
 
-/* Responsive */
+/* =========================================================
+   HEADER — RESPONSIVE BREAKPOINT (≤768px)
+   - Hides desktop nav
+   - Shows hamburger button
+   - Reduces container padding for smaller screens
+   ========================================================= */
 @media (max-width: 768px) {
   nav {
     display: none;
@@ -213,36 +270,58 @@ nav a:hover,
 }
 
 
+/* =========================================================
+   CSS CUSTOM PROPERTIES (DESIGN TOKENS)
+   Centralised brand and neutral colour palette.
+   Used throughout the hero banner and product sections.
+   ========================================================= */
 :root{
-  --brand:#2B3990;
-  --neutral-900:#111827;
-  --neutral-600:#6B7280;
-  --neutral-200:#E5E7EB;
-  --neutral-100:#F3F4F6;
-  --neutral-50:#F9FAFB;
+  --brand: #2B3990;          /* Primary brand blue */
+  --neutral-900: #111827;    /* Near-black for headings */
+  --neutral-600: #6B7280;    /* Mid-grey for secondary text */
+  --neutral-200: #E5E7EB;    /* Light border / divider colour */
+  --neutral-100: #F3F4F6;    /* Very light background tint */
+  --neutral-50:  #F9FAFB;    /* Off-white page background */
 }
 
+/* Second global reset (scoped within this block) */
 *{margin:0;padding:0;box-sizing:border-box}
 
+
+/* =========================================================
+   HERO BANNER SECTION  (#hero-banner)
+   Base font and background for the product hero area.
+   Background image is set lower in the file (parallax override).
+   ========================================================= */
 #hero-banner{
   font-family:'Inter',sans-serif;
   background:#fff;
   color:#111;
 }
 
+/* Scoped container max-width for the hero section */
 .container{
   max-width:1200px;
   margin:auto;
   padding:0 20px;
 }
+
+/* Default section vertical padding inside the hero banner */
 #hero-banner section {
   padding: 80px 0;
 }
 
+/* Urbanist font for all headings */
 h1,h2,h3{
   font-family:'Urbanist',sans-serif;
 }
 
+/* =========================================================
+   BUTTONS — PRIMARY & OUTLINE
+   Reusable CTA button styles used across multiple sections.
+   ========================================================= */
+
+/* Filled brand-colour button */
 .btn-primary{
   background:var(--brand);
   color:#fff;
@@ -259,6 +338,7 @@ h1,h2,h3{
   opacity:.9;
 }
 
+/* Ghost / outline button — transparent with brand border */
 .btn-outline{
   border:1px solid var(--brand);
   color:#111;
@@ -275,6 +355,7 @@ h1,h2,h3{
   background:var(--neutral-50);
 }
 
+/* On mobile, both buttons stack full-width */
 @media (max-width: 768px) {
   #hero-banner .btn-primary,
   #hero-banner .btn-outline {
@@ -286,8 +367,12 @@ h1,h2,h3{
   }
 }
 
-/* HERO */
 
+/* =========================================================
+   HERO LAYOUT — TWO-COLUMN GRID
+   Left: image gallery | Right: product info
+   Collapses to single column on ≤992px screens.
+   ========================================================= */
 .hero{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -295,6 +380,7 @@ h1,h2,h3{
   align-items:center;
 }
 
+/* Product title inside the hero info panel */
 .hero h1{
   font-size:48px;
   line-height:1.2;
@@ -302,6 +388,10 @@ h1,h2,h3{
   margin-bottom:25px;
 }
 
+/* =========================================================
+   HERO — FEATURE CHECKMARKS
+   List of key selling points with circular tick icons.
+   ========================================================= */
 .features{
   margin:25px 0;
 }
@@ -314,19 +404,25 @@ h1,h2,h3{
   font-size:16px;
 }
 
+/* Circular blue tick icon — fixed size prevents shrinking */
 .tick {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 22px;
   height: 22px;
-  min-width: 22px;        /* prevents shrinking */
+  min-width: 22px;        /* Prevents flex shrinking */
   background: #2B3990;
   color: #fff;
   border-radius: 50%;
   font-size: 11px;
   line-height: 1;
 }
+
+/* =========================================================
+   HERO — PRICE CARD
+   Displays price range, shipping info, and certification badges.
+   ========================================================= */
 .price-card{
   border:1px solid var(--neutral-200);
   padding:25px;
@@ -340,18 +436,23 @@ h1,h2,h3{
   font-size:14px;
 }
 
-/* Certification Badges */
+/* =========================================================
+   HERO — CERTIFICATION BADGES ROW
+   Flex row of BIS / ISO / CE badge pills above the product title.
+   ========================================================= */
 .certifications {
   display: flex;
   gap: 12px;
   margin-bottom: 24px;
   flex-wrap: wrap;
 }
+
 .price-card h3{
   font-size:20px;
   margin:10px 0;
 }
 
+/* Amber badge — used for shipping and return info */
 .badge{
   display:inline-block;
   background:#FEF3C7;
@@ -362,10 +463,11 @@ h1,h2,h3{
   margin:5px 5px 0 0;
 }
 
+/* Grey badge with icon — used for certification and feature tags */
 .badge1{
-  display: inline-flex;      /* important */
-  align-items: center;       /* vertically center image + text */
-  gap: 8px;                  /* space between image and text */
+  display: inline-flex;      /* Needed to vertically align icon + text */
+  align-items: center;
+  gap: 8px;                  /* Space between icon image and label text */
   background:#ecf0f1;
   color:#060707;
   padding:6px 12px;
@@ -375,7 +477,11 @@ h1,h2,h3{
   margin:15px 15px 0 0;
 }
 
-
+/* =========================================================
+   HERO — MAIN IMAGE CONTAINER
+   Placeholder background shown before image loads.
+   Overridden further below with full image + zoom styles.
+   ========================================================= */
 .hero-img{
   background:var(--neutral-100);
   height:500px;
@@ -387,8 +493,10 @@ h1,h2,h3{
   color:var(--neutral-600);
 }
 
-/* STATS */
-
+/* =========================================================
+   STATS SECTION
+   Full-width brand-coloured bar with 4-column stat grid.
+   ========================================================= */
 .stats{
   background:var(--brand);
   color:#fff;
@@ -411,8 +519,10 @@ h1,h2,h3{
   opacity:.7;
 }
 
-/* SPEC */
-
+/* =========================================================
+   SPEC (SPECIFICATIONS DETAIL) SECTION
+   Two-column layout: image left, spec grid right.
+   ========================================================= */
 .spec-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -420,6 +530,7 @@ h1,h2,h3{
   align-items:center;
 }
 
+/* 2×N grid of individual spec boxes */
 .spec-items{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -427,6 +538,7 @@ h1,h2,h3{
   margin-top:30px;
 }
 
+/* Individual spec box card */
 .spec-box{
   background:var(--neutral-50);
   border:1px solid var(--neutral-100);
@@ -445,8 +557,10 @@ h1,h2,h3{
   margin-top:5px;
 }
 
-/* APPLICATIONS */
-
+/* =========================================================
+   APPLICATIONS SECTION (legacy .app-grid)
+   4-column card grid on a light background.
+   ========================================================= */
 .app-section{
   background:var(--neutral-50);
 }
@@ -474,8 +588,10 @@ h1,h2,h3{
   margin:15px 0 10px;
 }
 
-/* CONTACT */
-
+/* =========================================================
+   CONTACT SECTION (legacy)
+   Brand-coloured background with a white form card.
+   ========================================================= */
 .contact{
   background:var(--brand);
   text-align:center;
@@ -502,14 +618,17 @@ h1,h2,h3{
   font-size:14px;
 }
 
+/* Legacy footer base style */
 footer{
   background:#111827;
   color:#aaa;
   text-align:center;
 }
 
-/* RESPONSIVE */
-
+/* =========================================================
+   RESPONSIVE — MEDIUM SCREENS (≤992px)
+   Collapses hero, spec, and app grids to fewer columns.
+   ========================================================= */
 @media(max-width:992px){
   .hero,
   .spec-grid{
@@ -524,164 +643,206 @@ footer{
     grid-template-columns:1fr 1fr;
   }
 }
+
+
+/* =========================================================
+   HERO IMAGE — GALLERY + ZOOM (DETAILED OVERRIDE)
+   Overrides the basic .hero-img styles above with full
+   gallery functionality: image fill, fade transition,
+   zoom lens overlay, and zoom preview panel.
+   ========================================================= */
+
+/* Main image container — clips the image and sets crosshair cursor */
 .hero-img {
-    position: relative;
-    background: #f3f4f6;
-    height: 500px;
-    border-radius: 20px;
-    overflow: hidden;
-    cursor: crosshair;
-  }
+  position: relative;
+  background: #f3f4f6;
+  height: 500px;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: crosshair;
+}
 
-  .hero-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: opacity 0.3s ease;
-    user-select: none;
-    pointer-events: none;
-  }
+/* Full-cover image inside the container */
+.hero-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s ease;   /* Used for the carousel fade effect */
+  user-select: none;
+  pointer-events: none;             /* Prevents drag/selection on the image */
+}
 
-  /* Carousel slide fade */
-  .hero-img img.fade {
-    opacity: 0;
-  }
+/* Fade class applied by JS during image swap transition */
+.hero-img img.fade {
+  opacity: 0;
+}
 
-  /* Zoom lens overlay */
-  .zoom-lens {
-    position: absolute;
-    width: 120px;
-    height: 120px;
-    border: 2px solid rgba(43, 57, 144, 0.6);
-    border-radius: 8px;
-    background: rgba(43, 57, 144, 0.08);
-    backdrop-filter: blur(1px);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    z-index: 10;
-  }
+/* =========================================================
+   ZOOM LENS OVERLAY
+   Small square that follows the cursor over the main image.
+   Shown on mouseenter, hidden on mouseleave via JS opacity toggle.
+   ========================================================= */
+.zoom-lens {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border: 2px solid rgba(43, 57, 144, 0.6);
+  border-radius: 8px;
+  background: rgba(43, 57, 144, 0.08);
+  backdrop-filter: blur(1px);
+  pointer-events: none;             /* Must not intercept mouse events */
+  opacity: 0;                       /* Hidden by default; JS sets to 1 on hover */
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
 
-  /* Zoom preview box — appears to the right of the gallery */
+/* =========================================================
+   ZOOM PREVIEW PANEL
+   Large preview panel that appears to the right of the gallery.
+   JS calculates background-position to show the zoomed region.
+   .active class is toggled by JS on mouseenter/mouseleave.
+   ========================================================= */
+.zoom-preview {
+  position: absolute;
+  top: 0;
+  left: calc(100% + 20px);     /* Positioned to the right of the gallery */
+  width: 380px;
+  height: 380px;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  opacity: 0;                   /* Hidden by default */
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform: scale(0.96);       /* Slight scale-up on activation for polish */
+  z-index: 100;
+  background: #fff;
+}
+
+/* Active state — fully visible and full scale */
+.zoom-preview.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Inner div — background-image, size and position set by JS for zoom effect */
+.zoom-preview-inner {
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+}
+
+/* =========================================================
+   THUMBNAILS STRIP
+   Horizontal scrollable row of small preview images below the main image.
+   Active thumbnail gets a brand-colour border ring.
+   ========================================================= */
+.thumbnails {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: nowrap;
+  overflow-x: auto;             /* Scrollable if thumbnails overflow */
+}
+
+/* Individual thumbnail item */
+.thumbnail {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  background: #f3f4f6;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+/* Lift effect on hover */
+.thumbnail:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+/* Active thumbnail — brand-colour border + outer glow ring */
+.thumbnail.active {
+  border-color: #2B3990;
+  box-shadow: 0 0 0 3px rgba(43, 57, 144, 0.15);
+}
+
+/* =========================================================
+   GALLERY WRAPPER & MAIN IMAGE WRAPPER
+   .gallery needs position:relative so the zoom preview can
+   be absolutely positioned relative to it.
+   ========================================================= */
+.gallery {
+  position: relative;
+  flex: 1;
+}
+
+.main-image-wrapper {
+  position: relative;
+}
+
+/* =========================================================
+   GALLERY — PREV / NEXT ARROW BUTTONS
+   Absolutely positioned inside .main-image-wrapper.
+   Hover turns them brand-blue with a scale-up effect.
+   ========================================================= */
+.gallery-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  background: #fff;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+}
+
+.gallery-btn:hover {
+  background: #2B3990;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(43,57,144,0.3);
+  transform: translateY(-50%) scale(1.08);   /* Preserve vertical centering on scale */
+}
+
+/* Horizontal positioning for left and right buttons */
+.gallery-btn.left  { left: 16px; }
+.gallery-btn.right { right: 16px; }
+
+/* On tablet/mobile: zoom preview moves below the main image */
+@media (max-width: 992px) {
   .zoom-preview {
-    position: absolute;
-    top: 0;
-    left: calc(100% + 20px);
-    width: 380px;
-    height: 380px;
-    border-radius: 16px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-    transform: scale(0.96);
-    z-index: 100;
-    background: #fff;
-  }
-
-  .zoom-preview.active {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .zoom-preview-inner {
+    left: 0;
+    top: calc(100% + 12px);
     width: 100%;
-    height: 100%;
-    background-repeat: no-repeat;
+    height: 260px;
   }
+}
 
-  /* Thumbnails */
-  .thumbnails {
-    display: flex;
-    gap: 12px;
-    margin-top: 16px;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  }
-
-  .thumbnail {
-    width: 80px;
-    height: 80px;
-    border-radius: 10px;
-    overflow: hidden;
-    flex-shrink: 0;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: border-color 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    background: #f3f4f6;
-  }
-
-  .thumbnail img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    pointer-events: none;
-  }
-
-  .thumbnail:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-  }
-
-  .thumbnail.active {
-    border-color: #2B3990;
-    box-shadow: 0 0 0 3px rgba(43, 57, 144, 0.15);
-  }
-
-  /* Gallery wrapper needs relative for zoom preview positioning */
-  .gallery {
-    position: relative;
-    flex: 1;
-  }
-
-  .main-image-wrapper {
-    position: relative;
-  }
-
-  /* Nav buttons */
-  .gallery-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 48px;
-    height: 48px;
-    background: #fff;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-    z-index: 10;
-  }
-
-  .gallery-btn:hover {
-    background: #2B3990;
-    color: #fff;
-    box-shadow: 0 4px 16px rgba(43,57,144,0.3);
-    transform: translateY(-50%) scale(1.08);
-  }
-
-  .gallery-btn.left { left: 16px; }
-  .gallery-btn.right { right: 16px; }
-
-  /* Mobile: zoom preview below */
-  @media (max-width: 992px) {
-    .zoom-preview {
-      left: 0;
-      top: calc(100% + 12px);
-      width: 100%;
-      height: 260px;
-    }
-  }
-
+/* =========================================================
+   RESPONSIVE — SMALL SCREENS (≤600px)
+   Further collapses grids and reduces heading font size.
+   ========================================================= */
 @media(max-width:600px){
   .app-grid{
     grid-template-columns:1fr;
@@ -691,11 +852,17 @@ footer{
     grid-template-columns:1fr;
   }
 
+  /* Smaller hero heading on mobile */
   .hero h1{
     font-size:32px;
   }
 }
 
+
+/* =========================================================
+   BREADCRUMB NAV
+   Small path indicator above the hero: "Products › Two For One Twister"
+   ========================================================= */
 .breadcrumb {
   display: flex;
   gap: 8px;
@@ -708,13 +875,21 @@ footer{
   padding: 0 20px;
 }
 
+/* The last crumb (current page) is darker than the preceding links */
 .breadcrumb span.active {
   color: #111827;
 }
 
+
+/* =========================================================
+   GALLERY & MAIN IMAGE WRAPPER — SHADOW OVERRIDE
+   Adds a card-style shadow and rounded corners to the
+   main image container inside the gallery.
+   ========================================================= */
 .gallery {
   flex: 1;
 }
+
 .main-image-wrapper {
   position: relative;
   background: #fff;
@@ -728,6 +903,7 @@ footer{
   display: block;
 }
 
+/* Basic gallery button positioning (base styles, overridden above) */
 .gallery-btn {
   position: absolute;
   top: 50%;
@@ -741,9 +917,10 @@ footer{
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.gallery-btn.left { left: 16px; }
+.gallery-btn.left  { left: 16px; }
 .gallery-btn.right { right: 16px; }
 
+/* Basic thumbnail strip (base styles, overridden above) */
 .thumbnails {
   display: flex;
   gap: 16px;
@@ -757,21 +934,30 @@ footer{
   border-radius: 8px;
 }
 
+
+/* =========================================================
+   COMPANY LOGOS STRIP
+   Centered row of partner/client logos below the hero.
+   On mobile, the row scrolls horizontally without wrapping.
+   ========================================================= */
 .company-section {
   margin-top: 100px;
   text-align: center;
 }
 
+/* Override any global p constraints so the label spans full width */
 .company-section p {
   margin-bottom: 32px;
   font-size: 14px;
   color: #6b7280;
   text-align: center;
-  width: 100%;          /* ← ensure it spans full width */
-  max-width: 100%;      /* ← override the global p max-width: 800px */
+  width: 100%;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
+
+/* Wrapping flex row of logos */
 .company-logos {
   display: flex;
   flex-wrap: wrap;
@@ -785,49 +971,69 @@ footer{
   object-fit: contain;
 }
 
+/* On mobile: single-row horizontal scroll instead of wrapping */
 @media (max-width: 768px) {
   #hero-banner .company-logos {
     flex-wrap: nowrap;
     overflow-x: auto;
-    scrollbar-width: none;
+    scrollbar-width: none;             /* Firefox — hide scrollbar */
     justify-content: flex-start;
   }
 
   #hero-banner .company-logos img {
-    flex-shrink: 0;
+    flex-shrink: 0;                    /* Prevent logos from collapsing */
   }
 }
+
+
+/* =========================================================
+   HERO BANNER — BACKGROUND IMAGE OVERRIDE
+   Applies parallax-style background to the entire #hero-banner
+   section. background-attachment: fixed creates the parallax
+   scroll effect as the user moves down the page.
+   ========================================================= */
 #hero-banner{
   font-family:'Inter',sans-serif;
   background-image: url('./assets/hero-fold-v2.png');
-  background-size: cover;        /* Makes image cover entire screen */
-  background-position: top;   /* Centers image */
-  background-repeat: no-repeat;  /* Prevent repeating */
-  background-attachment: fixed;  /* Optional: parallax effect */
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;       /* Parallax — image stays fixed while content scrolls */
   color:#111;
 }
 
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+
+/* =========================================================
+   GENERIC .SECTION UTILITY CLASS
+   Centered flex column with vertical padding.
+   Used inside the technical specifications section.
+   ========================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.section {
+  padding: 80px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Full-width content container inside .section */
+.container1 {
+  max-width: 1240px;
+  width: 100%;
+}
 
 
+/* =========================================================
+   TECHNICAL SPECIFICATIONS TABLE  (#table)
+   Dark-theme section with white text on dark grey backgrounds.
+   ========================================================= */
 
-  .section {
-    padding: 80px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .container1 {
-    max-width: 1240px;
-    width: 100%;
-  }
-
-
+/* Section background — dark navy */
 #table {
   background: #111827;
   color: white;
@@ -845,6 +1051,7 @@ footer{
   width: 100%;
 }
 
+/* Large white heading */
 #table h1 {
   font-size: 48px;
   font-weight: bold;
@@ -853,6 +1060,7 @@ footer{
   color: white;
 }
 
+/* White intro paragraph */
 #table p {
   font-size: 18px;
   line-height: 1.6;
@@ -861,6 +1069,7 @@ footer{
   color: white;
 }
 
+/* Table card wrapper — darker background inside the section */
 #table .table-wrapper {
   width: 100%;
   max-width: 1240px;
@@ -875,6 +1084,7 @@ footer{
   border-collapse: collapse;
 }
 
+/* Table header row — slightly lighter dark background */
 #table thead th {
   background: #374151;
   padding: 14px 24px;
@@ -883,21 +1093,25 @@ footer{
   font-weight: 600;
 }
 
+/* Table body cells */
 #table tbody td {
   padding: 16px 24px;
   background: #1f2937;
 }
 
+/* Row dividers (except the last row) */
 #table tbody tr:not(:last-child) {
   border-bottom: 1px solid #374151;
 }
 
+/* Country of origin cell — flag emoji + text in a flex row */
 #table .country {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
+/* Download datasheet button — ghost style (transparent, white border) */
 #table .download-btn {
   margin-top: 60px;
   padding: 14px 20px;
@@ -914,6 +1128,7 @@ footer{
   transition: 0.3s ease;
 }
 
+/* Hover fills the button with white and inverts text */
 #table .download-btn:hover {
   background: white;
   color: #111827;
@@ -924,6 +1139,7 @@ footer{
   height: 16px;
 }
 
+/* Responsive adjustments for the table section */
 @media (max-width: 768px) {
   #table h1 {
     font-size: 36px;
@@ -938,56 +1154,64 @@ footer{
   }
 }
 
-  /* Country row flex */
-  .country {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+/* Generic country flex row (used in the table) */
+.country {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Generic download button (base style before #table scope override) */
+.download-btn {
+  margin-top: 60px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: 1px solid white;
+  background: transparent;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: 0.3s ease;
+}
+
+.download-btn:hover {
+  background: white;
+  color: #111827;
+}
+
+.download-btn img {
+  width: 16px;
+  height: 16px;
+}
+
+/* Generic table responsive rules */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 36px;
   }
 
-  /* Download Button */
-  .download-btn {
-    margin-top: 60px;
-    padding: 14px 20px;
-    border-radius: 12px;
-    border: 1px solid white;
-    background: transparent;
-    color: white;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    transition: 0.3s ease;
+  .section {
+    padding: 50px 20px;
   }
 
-  .download-btn:hover {
-    background: white;
-    color: #111827;
+  table {
+    font-size: 14px;
   }
+}
 
-  .download-btn img {
-    width: 16px;
-    height: 16px;
-  }
 
-  /* Responsive */
-  @media (max-width: 768px) {
-    h1 {
-      font-size: 36px;
-    }
+/* =========================================================
+   FEATURES SECTION  (.features-section)
+   White section with a faint decorative background image,
+   a 3×2 card grid, and a centred CTA button.
+   All selectors are prefixed with .features-section to
+   avoid leaking styles into other sections.
+   ========================================================= */
 
-    .section {
-      padding: 50px 20px;
-    }
-
-    table {
-      font-size: 14px;
-    }
-  }
-
-  
 .features-section {
   position: relative;
   padding: 100px 20px;
@@ -999,6 +1223,7 @@ footer{
   box-sizing: border-box;
 }
 
+/* Scoped reset inside features section */
 .features-section *,
 .features-section *::before,
 .features-section *::after {
@@ -1007,6 +1232,7 @@ footer{
   padding: 0;
 }
 
+/* Content wrapper — sits above the background image (z-index: 2) */
 .features-section .fs-container {
   max-width: 1240px;
   margin: auto;
@@ -1014,6 +1240,7 @@ footer{
   z-index: 2;
 }
 
+/* Decorative background image — centred, very faint (opacity: 0.05) */
 .features-section .fs-bg-image {
   position: absolute;
   top: 50%;
@@ -1022,9 +1249,10 @@ footer{
   height: 1385px;
   transform: translate(-50%, -50%);
   opacity: 0.05;
-  z-index: 0;
+  z-index: 0;                        /* Behind all content */
 }
 
+/* Section heading */
 .features-section .fs-heading {
   font-size: 48px;
   font-weight: 700;
@@ -1032,6 +1260,7 @@ footer{
   max-width: 800px;
 }
 
+/* Section intro paragraph */
 .features-section .fs-hero-text {
   font-size: 18px;
   margin-top: 20px;
@@ -1040,17 +1269,19 @@ footer{
   line-height: 1.6;
 }
 
-/* Features Grid */
+/* ---- Features Card Grid ---- */
 .features-section .fs-features-wrapper {
   margin-top: 60px;
 }
 
+/* Responsive flex grid — 3 cards per row on desktop */
 .features-section .fs-features-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
 }
 
+/* Individual feature card — flex-basis of 1/3 with min-width fallback */
 .features-section .fs-feature-card {
   flex: 1 1 calc(33.333% - 24px);
   min-width: 260px;
@@ -1062,11 +1293,13 @@ footer{
   transition: 0.3s ease;
 }
 
+/* Card lift on hover */
 .features-section .fs-feature-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
 
+/* Card icon */
 .features-section .fs-feature-card img {
   width: 32px;
   height: 32px;
@@ -1085,7 +1318,7 @@ footer{
   line-height: 1.6;
 }
 
-/* CTA Button */
+/* Centred CTA button below the card grid */
 .features-section .fs-cta-button {
   margin: 60px auto 0 auto;
   display: block;
@@ -1104,13 +1337,14 @@ footer{
   background: #162d6d;
 }
 
-/* Responsive */
+/* Responsive: 2 cards per row on tablet */
 @media (max-width: 992px) {
   .features-section .fs-feature-card {
     flex: 1 1 calc(50% - 24px);
   }
 }
 
+/* Responsive: 1 card per row on mobile, reduced heading and padding */
 @media (max-width: 600px) {
   .features-section .fs-heading {
     font-size: 36px;
@@ -1123,6 +1357,15 @@ footer{
   }
 }
 
+
+/* =========================================================
+   FAQ SECTION  (.faq-section)
+   Accordion list with a catalogue email request form at the bottom.
+   - .faq-item          : each Q&A row
+   - .faq-item.active   : JS adds this to expand the answer
+   - .faq-answer        : hidden by default; shown when parent has .active
+   - .faq-icon          : shows "+" or "−" depending on open state
+   ========================================================= */
 
 .faq-section {
   padding: 80px 20px;
@@ -1146,6 +1389,7 @@ footer{
   margin: auto;
 }
 
+/* "Frequently" is rendered in brand blue via the <span> child */
 .faq-section .faq-heading {
   font-size: 48px;
   font-weight: bold;
@@ -1157,6 +1401,7 @@ footer{
   color: #2b3990;
 }
 
+/* Individual FAQ accordion card */
 .faq-section .faq-item {
   background: #fff;
   border: 1px solid #e4e4e7;
@@ -1166,6 +1411,7 @@ footer{
   box-shadow: 0 2px 6px rgba(0,0,0,0.04);
 }
 
+/* Question row — space-between pushes the icon to the right */
 .faq-section .faq-question {
   display: flex;
   justify-content: space-between;
@@ -1176,6 +1422,7 @@ footer{
   font-family: Arial, sans-serif;
 }
 
+/* +/− toggle icon — circular pill */
 .faq-section .faq-icon {
   width: 24px;
   height: 24px;
@@ -1186,13 +1433,15 @@ footer{
   justify-content: center;
   font-weight: bold;
   transition: 0.3s;
-  flex-shrink: 0;
+  flex-shrink: 0;                    /* Prevents icon from squishing */
 }
 
+/* Active icon background changes to light red when open */
 .faq-section .faq-item.active .faq-icon {
   background: #ffe4e6;
 }
 
+/* Answer is hidden by default — only shown when .active is on the parent .faq-item */
 .faq-section .faq-answer {
   margin-top: 15px;
   color: #52525b;
@@ -1206,7 +1455,7 @@ footer{
   display: block;
 }
 
-/* Email Section */
+/* ---- FAQ Email Catalogue Request Form ---- */
 .faq-section .faq-email-section {
   margin-top: 60px;
   padding: 30px;
@@ -1237,6 +1486,7 @@ footer{
   font-family: Arial, sans-serif;
 }
 
+/* Right-side form — constrained width */
 .faq-section .faq-email-form {
   flex: 1;
   min-width: 260px;
@@ -1271,6 +1521,7 @@ footer{
   background: #1e40af;
 }
 
+/* Responsive: heading shrinks, email form stacks vertically */
 @media (max-width: 768px) {
   .faq-section .faq-heading {
     font-size: 32px;
@@ -1282,13 +1533,19 @@ footer{
 }
 
 
+/* =========================================================
+   APPLICATIONS SECTION  (.applications-section)
+   Horizontally scrollable card gallery with a background image.
+   Arrow buttons scroll the gallery via JS (appsScrollGallery).
+   ========================================================= */
+
 .applications-section {
   padding: 80px 40px;
   background: #fff;
   font-family: Arial, sans-serif;
-   background-image: url('./assets/hero-fold-v2.png');
-  background-size: cover;        /* Makes image cover entire screen */
-  background-position: top;   /* Centers image */
+  background-image: url('./assets/hero-fold-v2.png');
+  background-size: cover;
+  background-position: top;
   background-repeat: no-repeat;
 }
 
@@ -1305,7 +1562,7 @@ footer{
   margin: auto;
 }
 
-/* Header */
+/* Header row — heading + subtext on the left, nav arrows on the right */
 .applications-section .apps-header {
   display: flex;
   justify-content: space-between;
@@ -1329,7 +1586,7 @@ footer{
   font-family: Arial, sans-serif;
 }
 
-/* Navigation Buttons */
+/* Left/right scroll arrow buttons */
 .applications-section .apps-nav-buttons {
   display: flex;
   gap: 16px;
@@ -1358,7 +1615,7 @@ footer{
   color: #111;
 }
 
-/* Gallery */
+/* Horizontally scrollable card row — scroll-behavior:smooth for JS scrollLeft */
 .applications-section .apps-gallery {
   display: flex;
   gap: 24px;
@@ -1366,11 +1623,12 @@ footer{
   scroll-behavior: smooth;
 }
 
+/* Hide scrollbar — navigation handled by arrow buttons */
 .applications-section .apps-gallery::-webkit-scrollbar {
   display: none;
 }
 
-/* Card */
+/* Fixed-size card — image fills the card, text overlays the bottom */
 .applications-section .apps-card {
   position: relative;
   flex-shrink: 0;
@@ -1380,6 +1638,7 @@ footer{
   overflow: hidden;
 }
 
+/* Full-bleed card image */
 .applications-section .apps-card img {
   width: 100%;
   height: 100%;
@@ -1388,6 +1647,7 @@ footer{
   inset: 0;
 }
 
+/* Dark gradient overlay at the bottom — makes white text readable */
 .applications-section .apps-card::after {
   content: "";
   position: absolute;
@@ -1395,12 +1655,13 @@ footer{
   background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
 }
 
+/* Text content positioned over the gradient at the bottom of the card */
 .applications-section .apps-card-content {
   position: absolute;
   bottom: 0;
   padding: 30px;
   color: white;
-  z-index: 2;
+  z-index: 2;                        /* Above the ::after gradient overlay */
 }
 
 .applications-section .apps-card-content .apps-card-title {
@@ -1416,7 +1677,7 @@ footer{
   font-family: Arial, sans-serif;
 }
 
-/* Mobile */
+/* Responsive: stacks header, reduces heading size, centres nav buttons */
 @media (max-width: 768px) {
   .applications-section {
     padding: 50px 20px;
@@ -1442,6 +1703,13 @@ footer{
 }
 
 
+/* =========================================================
+   MANUFACTURING HERO  (.manufacturing-hero)
+   Hero banner for the manufacturing process section.
+   Contains a faint background image, centred heading/text,
+   and the workflow stepper component below it.
+   ========================================================= */
+
 .manufacturing-hero {
   position: relative;
   padding: 60px 20px;
@@ -1451,9 +1719,9 @@ footer{
   background: #fff;
   font-family: Arial, sans-serif;
   box-sizing: border-box;
-   background-image: url('./assets/hero-fold-v2.png');
-  background-size: cover;        /* Makes image cover entire screen */
-  background-position: top;   /* Centers image */
+  background-image: url('./assets/hero-fold-v2.png');
+  background-size: cover;
+  background-position: top;
   background-repeat: no-repeat;
 }
 
@@ -1465,6 +1733,7 @@ footer{
   padding: 0;
 }
 
+/* Decorative background image — low opacity, centred absolutely */
 .manufacturing-hero .mfg-bg-image {
   position: absolute;
   top: 50%;
@@ -1475,6 +1744,7 @@ footer{
   opacity: 0.15;
 }
 
+/* Centred text block for the manufacturing hero */
 .manufacturing-hero .mfg-hero-content {
   position: relative;
   max-width: 900px;
@@ -1494,7 +1764,11 @@ footer{
   font-family: Arial, sans-serif;
 }
 
-/* ── Process box: scoped to .mfg-process-container ── */
+/* =========================================================
+   MANUFACTURING PROCESS CONTAINER (legacy .mfg-process-container)
+   White card with rounded corners and a drop shadow that
+   holds the step buttons and detail panel.
+   ========================================================= */
 
 .mfg-process-container {
   max-width: 1200px;
@@ -1515,7 +1789,7 @@ footer{
   padding: 0;
 }
 
-/* Steps */
+/* Wrapping row of step pill buttons */
 .mfg-process-container .mfg-steps {
   display: flex;
   flex-wrap: wrap;
@@ -1524,6 +1798,7 @@ footer{
   margin-bottom: 40px;
 }
 
+/* Pill-shaped step button — outlined by default */
 .mfg-process-container .mfg-step-btn {
   padding: 10px 18px;
   border-radius: 30px;
@@ -1536,6 +1811,7 @@ footer{
   font-size: 14px;
 }
 
+/* Active step button — blue gradient fill */
 .mfg-process-container .mfg-step-btn.active {
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   color: white;
@@ -1546,7 +1822,7 @@ footer{
   background: #f3f4f6;
 }
 
-/* Detail */
+/* Two-column detail panel: text left, image right */
 .mfg-process-container .mfg-process-detail {
   display: flex;
   flex-wrap: wrap;
@@ -1573,6 +1849,7 @@ footer{
   font-family: Arial, sans-serif;
 }
 
+/* Checklist with blue tick via ::before pseudo-element */
 .mfg-process-container .mfg-features {
   list-style: none;
 }
@@ -1592,7 +1869,7 @@ footer{
   color: #3b82f6;
 }
 
-/* Image */
+/* Image area — rounded, fills remaining flex space */
 .mfg-process-container .mfg-process-image {
   flex: 1;
   min-width: 280px;
@@ -1607,7 +1884,7 @@ footer{
   display: block;
 }
 
-/* Responsive */
+/* Responsive: heading shrinks, detail panel stacks vertically */
 @media (max-width: 768px) {
   .manufacturing-hero .mfg-hero-heading {
     font-size: 30px;
@@ -1622,15 +1899,23 @@ footer{
   }
 }
 
+
+/* =========================================================
+   TESTIMONIALS SECTION  (.testimonials-section)
+   Horizontally scrollable row of customer review cards
+   on a background image. Cards have a fixed 400px width
+   and scroll-behavior:smooth.
+   ========================================================= */
+
 .testimonials-section {
   width: 100%;
   background: #fff;
   font-family: Arial, sans-serif;
   color: #111827;
   box-sizing: border-box;
-   background-image: url('./assets/hero-fold-v2.png');
-  background-size: cover;        /* Makes image cover entire screen */
-  background-position: top;   /* Centers image */
+  background-image: url('./assets/hero-fold-v2.png');
+  background-size: cover;
+  background-position: top;
   background-repeat: no-repeat;
 }
 
@@ -1647,7 +1932,7 @@ footer{
   margin: auto;
 }
 
-/* Header */
+/* Centred section header */
 .testimonials-section .tsm-header {
   text-align: center;
   margin-bottom: 60px;
@@ -1669,7 +1954,7 @@ footer{
   font-family: Arial, sans-serif;
 }
 
-/* Grid */
+/* Scrollable row — scrollbar hidden, navigation expected via future arrows */
 .testimonials-section .tsm-grid {
   display: flex;
   gap: 24px;
@@ -1681,7 +1966,7 @@ footer{
   display: none;
 }
 
-/* Card */
+/* Individual testimonial card — fixed 400px width, white background */
 .testimonials-section .tsm-card {
   background: white;
   padding: 32px;
@@ -1691,6 +1976,7 @@ footer{
   width: 400px;
 }
 
+/* Decorative oversized opening quotation mark */
 .testimonials-section .tsm-quote-icon {
   font-size: 48px;
   color: #1e3a8a;
@@ -1713,13 +1999,14 @@ footer{
   font-family: Arial, sans-serif;
 }
 
-/* Author */
+/* Author row — avatar circle + name and title */
 .testimonials-section .tsm-author {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
+/* Avatar placeholder circle — replace with <img> when real photos are available */
 .testimonials-section .tsm-avatar {
   width: 48px;
   height: 48px;
@@ -1740,7 +2027,7 @@ footer{
   font-family: Arial, sans-serif;
 }
 
-/* Responsive */
+/* Responsive breakpoints */
 @media (max-width: 992px) {
   .testimonials-section .tsm-heading {
     font-size: 36px;
@@ -1762,6 +2049,12 @@ footer{
 }
 
 
+/* =========================================================
+   PORTFOLIO SECTION  (.portfolio-section)
+   White section with a background-image hero, a 3-column
+   product card grid, and a CTA banner at the bottom.
+   ========================================================= */
+
 .portfolio-section {
   font-family: Arial, sans-serif;
   color: #222;
@@ -1777,19 +2070,20 @@ footer{
   padding: 0;
 }
 
-/* Hero */
+/* Hero sub-section inside the portfolio — background image + centred heading */
 .portfolio-section .pf-hero {
   position: relative;
   padding: 40px 20px;
   text-align: center;
   border-bottom: 1px solid #d4d4d4;
   overflow: hidden;
-    background-image: url('./assets/hero-fold-v2.png');
-  background-size: cover;        /* Makes image cover entire screen */
-  background-position: top;   /* Centers image */
-  background-repeat: no-repeat; 
+  background-image: url('./assets/hero-fold-v2.png');
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
 }
 
+/* Legacy background image (used before background-image was added directly to .pf-hero) */
 .portfolio-section .pf-hero-bg {
   position: absolute;
   top: 50%;
@@ -1801,12 +2095,13 @@ footer{
   opacity: 0.15;
 }
 
+/* Centred text content above the background image */
 .portfolio-section .pf-hero-content {
   position: relative;
   z-index: 2;
   max-width: 800px;
   margin: auto;
-  text-align: center;  /* ← add this */
+  text-align: center;
 }
 
 .portfolio-section .pf-hero-heading {
@@ -1815,7 +2110,7 @@ footer{
   line-height: 1.2;
   margin-bottom: 20px;
   font-family: Arial, sans-serif;
-  white-space: nowrap;
+  white-space: nowrap;               /* Prevent heading from wrapping on desktop */
 }
 
 .portfolio-section .pf-hero-text {
@@ -1826,7 +2121,7 @@ footer{
   text-align: center;
 }
 
-/* Products Grid */
+/* 3-column product card grid */
 .portfolio-section .pf-products {
   max-width: 1240px;
   margin: 80px auto;
@@ -1836,6 +2131,7 @@ footer{
   padding: 0 20px;
 }
 
+/* Individual product card — flex column so "Learn More" button stays at the bottom */
 .portfolio-section .pf-product-card {
   background: white;
   border-radius: 20px;
@@ -1861,6 +2157,7 @@ footer{
   font-family: Arial, sans-serif;
 }
 
+/* Product image — margin-top:auto pushes it to the bottom of the card */
 .portfolio-section .pf-product-card .pf-card-img {
   width: 100%;
   border-radius: 16px;
@@ -1868,6 +2165,7 @@ footer{
   display: block;
 }
 
+/* Ghost learn-more button with brand-blue tint */
 .portfolio-section .pf-learn-btn {
   margin-top: 16px;
   padding: 12px;
@@ -1886,12 +2184,13 @@ footer{
   background: rgba(43,57,144,0.15);
 }
 
-/* CTA */
+/* CTA banner wrapper — centres the inner panel */
 .portfolio-section .pf-cta-wrapper {
   display: flex;
   justify-content: center;
 }
 
+/* "Didn't find what you're looking for?" banner */
 .portfolio-section .pf-cta {
   max-width: 1200px;
   width: 100%;
@@ -1912,6 +2211,7 @@ footer{
   font-family: Arial, sans-serif;
 }
 
+/* Highlighted "you're looking for?" span in brand blue */
 .portfolio-section .pf-cta-text .pf-cta-heading span {
   color: #2B3990;
 }
@@ -1923,6 +2223,7 @@ footer{
   font-family: Arial, sans-serif;
 }
 
+/* "Talk to an Expert" button — brand blue, with icon */
 .portfolio-section .pf-cta-btn {
   background: #2B3990;
   color: white;
@@ -1947,7 +2248,7 @@ footer{
   width: 18px;
 }
 
-/* Responsive */
+/* Responsive: 2-column grid on tablet, stacked CTA */
 @media (max-width: 1000px) {
   .portfolio-section .pf-products {
     grid-template-columns: repeat(2, 1fr);
@@ -1959,6 +2260,7 @@ footer{
   }
 }
 
+/* Responsive: 1-column grid and full-width hero on mobile */
 @media (max-width: 600px) {
   .portfolio-section .pf-hero {
     padding: 80px 20px;
@@ -1972,6 +2274,14 @@ footer{
     grid-template-columns: 1fr;
   }
 }
+
+
+/* =========================================================
+   RESOURCES & DOWNLOADS SECTION  (.resources-section)
+   Centered list of downloadable PDF documents.
+   Background image set as cover; content in a white card.
+   ========================================================= */
+
 .resources-section {
   display: flex;
   justify-content: center;
@@ -1980,9 +2290,9 @@ footer{
   font-family: 'Inter', Arial, sans-serif;
   box-sizing: border-box;
   background-image: url('./assets/hero-fold-v2.png');
-  background-size: cover;        /* Makes image cover entire screen */
-  background-position: top;   /* Centers image */
-  background-repeat: no-repeat; 
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
 }
 
 .resources-section *,
@@ -1999,7 +2309,7 @@ footer{
   padding: 80px 80px;
 }
 
-/* Header */
+/* Centred section header */
 .resources-section .rsc-header {
   display: flex;
   flex-direction: column;
@@ -2025,7 +2335,7 @@ footer{
   font-family: 'Inter', Arial, sans-serif;
 }
 
-/* Download Box */
+/* White card containing the download rows */
 .resources-section .rsc-download-box {
   background: white;
   border-radius: 16px;
@@ -2033,7 +2343,7 @@ footer{
   overflow: hidden;
 }
 
-/* Download Item */
+/* Individual download row — space-between pushes button to the right */
 .resources-section .rsc-download-item {
   display: flex;
   justify-content: space-between;
@@ -2042,6 +2352,7 @@ footer{
   border-bottom: 1px solid #e5e7eb;
 }
 
+/* Remove bottom border from the last item */
 .resources-section .rsc-download-item:last-child {
   border-bottom: none;
 }
@@ -2053,6 +2364,7 @@ footer{
   font-family: 'Inter', Arial, sans-serif;
 }
 
+/* Ghost download button — indigo text, no background, with icon */
 .resources-section .rsc-download-btn {
   display: flex;
   align-items: center;
@@ -2075,7 +2387,7 @@ footer{
   font-size: 20px;
 }
 
-/* Responsive */
+/* Responsive: reduce padding and heading size */
 @media (max-width: 900px) {
   .resources-section .rsc-container {
     padding: 80px 40px;
@@ -2104,6 +2416,7 @@ footer{
     font-size: 16px;
   }
 
+  /* Stack download item vertically on small screens */
   .resources-section .rsc-download-item {
     flex-direction: column;
     align-items: flex-start;
@@ -2116,6 +2429,16 @@ footer{
   }
 }
 
+
+/* =========================================================
+   CONTACT SECTION  (.contact-section)
+   Two-column layout on a background image:
+   Left  — heading, description, divider, direct contact info
+   Right — white input form card
+   The inner .ctc-container is a brand-blue card with a
+   drop shadow, providing strong contrast against the bg image.
+   ========================================================= */
+
 .contact-section {
   position: relative;
   display: flex;
@@ -2126,6 +2449,7 @@ footer{
   font-family: 'Inter', Arial, sans-serif;
   box-sizing: border-box;
 }
+
 .contact-section *,
 .contact-section *::before,
 .contact-section *::after {
@@ -2134,6 +2458,7 @@ footer{
   padding: 0;
 }
 
+/* Decorative background image — positioned absolutely, covers the section */
 .contact-section .ctc-bg {
   position: absolute;
   top: 50%;
@@ -2146,20 +2471,21 @@ footer{
   height: 100%;
 }
 
+/* Brand-blue inner container card — wraps info panel + form */
 .contact-section .ctc-container {
   display: flex;
   gap: 60px;
-  background: #2B3990; /* ← semi-transparent so bg image shows */
+  background: #2B3990;
   padding: 60px;
   border-radius: 32px;
   box-shadow: 0 30px 60px rgba(0,0,0,0.5);
   max-width: 1240px;
   width: 100%;
-  z-index: 2;
+  z-index: 2;                        /* Above the background image */
   flex-wrap: wrap;
 }
 
-/* Left Info */
+/* Left info panel — white text on blue background */
 .contact-section .ctc-info {
   flex: 1;
   min-width: 280px;
@@ -2183,12 +2509,14 @@ footer{
   font-family: 'Inter', Arial, sans-serif;
 }
 
+/* Horizontal rule divider — semi-transparent white */
 .contact-section .ctc-divider {
   height: 2px;
   background: rgba(255,255,255,0.2);
   margin: 30px 0 10px;
 }
 
+/* Small print — phone and email contact details */
 .contact-section .ctc-small {
   font-size: 14px;
   line-height: 20px;
@@ -2202,7 +2530,7 @@ footer{
   text-decoration: underline;
 }
 
-/* Form */
+/* ---- Contact Form Card ---- */
 .contact-section .ctc-form {
   background: #f5f5f5;
   padding: 30px;
@@ -2211,6 +2539,7 @@ footer{
   max-width: 100%;
 }
 
+/* "Contact Us Today" label above the form fields */
 .contact-section .ctc-form-label {
   font-size: 16px;
   font-weight: 500;
@@ -2220,11 +2549,12 @@ footer{
   font-family: 'Inter', Arial, sans-serif;
 }
 
-/* Inputs */
+/* Wrapper spacing between input fields */
 .contact-section .ctc-input-box {
   margin-top: 12px;
 }
 
+/* Input field container — white background with subtle border */
 .contact-section .ctc-input-field {
   display: flex;
   align-items: center;
@@ -2235,6 +2565,7 @@ footer{
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
+/* Actual <input> element — inherits container dimensions */
 .contact-section .ctc-input-field input {
   border: none;
   outline: none;
@@ -2245,7 +2576,8 @@ footer{
   background: transparent;
 }
 
-/* Phone */
+/* ---- Phone Number Field ---- */
+/* Flex row: country code pill on the left, input on the right */
 .contact-section .ctc-phone-box {
   display: flex;
   align-items: center;
@@ -2255,6 +2587,7 @@ footer{
   margin-top: 12px;
 }
 
+/* "+91" country code prefix with a right divider */
 .contact-section .ctc-phone-code {
   padding: 10px;
   border-right: 1px solid #e4e4e7;
@@ -2267,7 +2600,7 @@ footer{
 }
 
 .contact-section .ctc-phone-code img {
-  width: 16px;
+  width: 16px;                       /* Dropdown chevron icon */
 }
 
 .contact-section .ctc-phone-input {
@@ -2285,7 +2618,7 @@ footer{
   background: transparent;
 }
 
-/* Button */
+/* Form submit button — dark charcoal, full width */
 .contact-section .ctc-submit-btn {
   margin-top: 16px;
   width: 100%;
@@ -2305,7 +2638,7 @@ footer{
   background: #3f3f46;
 }
 
-/* Responsive */
+/* Responsive: stack columns on tablet and reduce heading size */
 @media (max-width: 900px) {
   .contact-section .ctc-container {
     flex-direction: column;
@@ -2318,6 +2651,15 @@ footer{
   }
 }
 
+
+/* =========================================================
+   FOOTER  (.footer-section)
+   White card-style footer with:
+   - Decorative background image (low opacity)
+   - Top bar: logo + tagline
+   - 4-column link grid: About, Categories, Products, Contact
+   - Bottom bar: copyright + legal links
+   ========================================================= */
 
 .footer-section {
   width: 100%;
@@ -2336,7 +2678,7 @@ footer{
   padding: 0;
 }
 
-/* Main */
+/* Footer main area — flex column, centred, with generous padding */
 .footer-section .ftr-main {
   position: relative;
   padding: 100px 20px;
@@ -2345,7 +2687,7 @@ footer{
   align-items: center;
 }
 
-/* Background */
+/* Decorative background image — centred, very faint (opacity: 0.25) */
 .footer-section .ftr-bg {
   position: absolute;
   top: 50%;
@@ -2357,7 +2699,7 @@ footer{
   pointer-events: none;
 }
 
-/* Top Header */
+/* Top header bar — logo left, tagline right */
 .footer-section .ftr-top {
   display: flex;
   justify-content: space-between;
@@ -2370,7 +2712,7 @@ footer{
   width: 100%;
   max-width: 1240px;
   box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-  z-index: 2;
+  z-index: 2;                        /* Above the background image */
   flex-wrap: wrap;
 }
 
@@ -2378,6 +2720,7 @@ footer{
   width: 110px;
 }
 
+/* Tagline: "Premium HDPE Pipes & Fittings Manufacturer in South India" */
 .footer-section .ftr-title {
   font-size: 22px;
   font-weight: 600;
@@ -2386,11 +2729,12 @@ footer{
   color: #111;
 }
 
+/* Brand-blue span inside the tagline */
 .footer-section .ftr-title .ftr-blue {
   color: #2b3990;
 }
 
-/* Grid */
+/* 4-column link grid */
 .footer-section .ftr-grid {
   display: flex;
   gap: 40px;
@@ -2401,7 +2745,7 @@ footer{
   z-index: 2;
 }
 
-/* Column */
+/* Individual column — min-width prevents excessive squishing */
 .footer-section .ftr-column {
   flex: 1;
   min-width: 220px;
@@ -2431,7 +2775,8 @@ footer{
   color: #000;
 }
 
-/* Contact Items */
+/* ---- Contact Column ---- */
+/* Each contact item: icon + text in a flex row */
 .footer-section .ftr-contact-item {
   display: flex;
   gap: 8px;
@@ -2445,16 +2790,17 @@ footer{
 .footer-section .ftr-contact-item img {
   width: 16px;
   margin-top: 2px;
-  flex-shrink: 0;
+  flex-shrink: 0;                    /* Prevents icon from squishing on long text */
 }
 
+/* Thin horizontal divider between contact details and social icons */
 .footer-section .ftr-contact-divider {
   margin: 20px 0;
   height: 1px;
   background: #e4e4e7;
 }
 
-/* Social */
+/* Social media icon row */
 .footer-section .ftr-social {
   display: flex;
   gap: 15px;
@@ -2465,7 +2811,8 @@ footer{
   cursor: pointer;
 }
 
-/* Bottom */
+/* ---- Footer Bottom Bar ---- */
+/* Thin copyright and legal links row below the main footer */
 .footer-section .ftr-bottom {
   border-top: 1px solid #e4e4e7;
   padding: 15px 20px;
@@ -2473,6 +2820,7 @@ footer{
   justify-content: center;
 }
 
+/* Space-between inner row: copyright left, links right */
 .footer-section .ftr-bottom-inner {
   display: flex;
   justify-content: space-between;
@@ -2507,7 +2855,7 @@ footer{
   color: #000;
 }
 
-/* Responsive */
+/* Responsive: stack columns on tablet and mobile */
 @media (max-width: 900px) {
   .footer-section .ftr-top {
     flex-direction: column;
@@ -2524,6 +2872,18 @@ footer{
   }
 }
 
+
+/* =========================================================
+   WORKFLOW / MANUFACTURING STEPPER  (.workflow-section)
+   Step-by-step process viewer inside the manufacturing hero.
+   - .wf-stepper    : wrapping row of step pill buttons
+   - .wf-step-btn   : individual step button; .active turns it brand-blue
+   - .wf-content    : two-column layout — text left, image right
+   - .wf-checklist  : list of feature items with checkmark icons
+   - .wf-image-area : right panel with a full-cover background image
+   - .wf-icons      : absolutely positioned icon overlays on the image
+   ========================================================= */
+
 .workflow-section {
   padding: 40px 20px;
   font-family: Arial, sans-serif;
@@ -2538,6 +2898,7 @@ footer{
   padding: 0;
 }
 
+/* White card container for the stepper + content */
 .workflow-section .wf-container {
   background: white;
   padding: 30px;
@@ -2547,8 +2908,7 @@ footer{
   margin: auto;
 }
 
-/* Stepper */
-/* Stepper */
+/* Stepper row — flex-wrap allows pills to wrap on narrow screens */
 .workflow-section .wf-stepper {
   display: flex;
   gap: 10px;
@@ -2556,8 +2916,9 @@ footer{
   flex-wrap: wrap;
 }
 
+/* Individual step pill button — outlined by default */
 .workflow-section .wf-step-btn {
-  flex: 1;
+  flex: 1;                           /* Each button takes equal width */
   padding: 10px 16px;
   border-radius: 30px;
   border: 1px solid #ddd;
@@ -2569,7 +2930,7 @@ footer{
   transition: 0.3s;
 }
 
-/* Mobile scroll fix — add this block right here */
+/* On mobile: stepper scrolls horizontally (prevents wrapping) */
 @media (max-width: 768px) {
   #workflow-section .wf-stepper {
     flex-wrap: nowrap;
@@ -2589,13 +2950,14 @@ footer{
   }
 }
 
+/* Active step button — brand-blue fill */
 .workflow-section .wf-step-btn.active {
   background: #2b3990;
   color: white;
   border: none;
 }
 
-/* Content */
+/* Two-column content area — text left, image right */
 .workflow-section .wf-content {
   display: flex;
   gap: 40px;
@@ -2603,6 +2965,7 @@ footer{
   flex-wrap: wrap;
 }
 
+/* Text panel */
 .workflow-section .wf-text-area {
   flex: 1;
   min-width: 280px;
@@ -2624,12 +2987,14 @@ footer{
   font-family: Arial, sans-serif;
 }
 
+/* Vertical list of checklist items */
 .workflow-section .wf-checklist {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
+/* Individual checklist item — icon + label in a flex row */
 .workflow-section .wf-check-item {
   display: flex;
   align-items: center;
@@ -2641,10 +3006,10 @@ footer{
 
 .workflow-section .wf-check-item img {
   width: 16px;
-  flex-shrink: 0;
+  flex-shrink: 0;                    /* Prevents icon from squishing */
 }
 
-/* Image Area */
+/* Image panel — fixed height, rounded, with overflow hidden */
 .workflow-section .wf-image-area {
   flex: 1;
   min-width: 280px;
@@ -2654,6 +3019,7 @@ footer{
   position: relative;
 }
 
+/* Full-cover background image inside the image panel */
 .workflow-section .wf-image-area img.wf-bg-image {
   width: 100%;
   height: 100%;
@@ -2661,6 +3027,7 @@ footer{
   display: block;
 }
 
+/* Icon overlays — positioned top-left over the image */
 .workflow-section .wf-icons {
   position: absolute;
   top: 20px;
@@ -2671,10 +3038,10 @@ footer{
 
 .workflow-section .wf-icons img {
   width: 50px;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);       /* Frosted-glass effect behind icons */
 }
 
-/* Responsive */
+/* Responsive: stack content and image vertically on mobile */
 @media (max-width: 768px) {
   .workflow-section .wf-content {
     flex-direction: column;
@@ -2689,9 +3056,15 @@ footer{
     flex: unset;
     width: auto;
   }
-
 }
 
+
+/* =========================================================
+   MISC RESPONSIVE OVERRIDES
+   Small targeted fixes for specific components on mobile.
+   ========================================================= */
+
+/* Portfolio CTA button — full width and centred on very small screens */
 @media (max-width: 600px) {
   .portfolio-section .pf-cta-btn {
     width: 100%;
@@ -2699,6 +3072,8 @@ footer{
   }
 }
 
+/* Hero banner — reorder gallery and product info on mobile:
+   product info (order:1) appears above the gallery (order:2) */
 @media (max-width: 768px) {
   #hero-banner .hero {
     display: flex;
@@ -2712,10 +3087,9 @@ footer{
   #hero-banner .hero > div:not(.gallery) {
     order: 1;
   }
+
+  /* Hide zoom preview on mobile — not practical on touch devices */
   #hero-banner .zoom-preview {
     display: none;
   }
 }
-
-
-
