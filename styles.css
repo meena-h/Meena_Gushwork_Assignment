@@ -2524,15 +2524,24 @@ footer{
 }
 
 /* Stepper */
-.workflow-section .wf-stepper {
+#workflow-section .wf-stepper {
   display: flex;
   gap: 10px;
   margin-bottom: 30px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 4px;
 }
 
-.workflow-section .wf-step-btn {
-  flex: 1;
+#workflow-section .wf-stepper::-webkit-scrollbar {
+  display: none;
+}
+
+#workflow-section .wf-step-btn {
+  flex-shrink: 0;
+  white-space: nowrap;
   padding: 10px 16px;
   border-radius: 30px;
   border: 1px solid #ddd;
@@ -2542,6 +2551,13 @@ footer{
   font-family: Arial, sans-serif;
   font-size: 14px;
   transition: 0.3s;
+  color: #111;
+}
+
+#workflow-section .wf-step-btn.active {
+  background: #2b3990;
+  color: white;
+  border: none;
 }
 
 .workflow-section .wf-step-btn.active {
@@ -2644,4 +2660,5 @@ footer{
     flex: unset;
     width: auto;
   }
+
 }
