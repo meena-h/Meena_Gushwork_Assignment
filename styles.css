@@ -2524,6 +2524,7 @@ footer{
 }
 
 /* Stepper */
+/* Stepper */
 .workflow-section .wf-stepper {
   display: flex;
   gap: 10px;
@@ -2544,10 +2545,24 @@ footer{
   transition: 0.3s;
 }
 
-#workflow-section .wf-step-btn.active {
-  background: #2b3990;
-  color: white;
-  border: none;
+/* Mobile scroll fix — add this block right here */
+@media (max-width: 768px) {
+  .workflow-section .wf-stepper {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+
+  .workflow-section .wf-stepper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .workflow-section .wf-step-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
 }
 
 .workflow-section .wf-step-btn.active {
@@ -2659,4 +2674,5 @@ footer{
     justify-content: center;
   }
 }
+
 
